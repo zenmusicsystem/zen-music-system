@@ -101,12 +101,6 @@
       background-clip: text;
       color: transparent;
     }
-    .grad-text-warm {
-      background: linear-gradient(90deg, #FFB800, #FF5C00 40%, #FF007A);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
     .grad-rainbow { background: linear-gradient(90deg, #10FFA0, #00F0FF, #A855F7, #FF007A, #FFB800); }
     .grad-youtube { background: linear-gradient(120deg, #FF0033, #FF007A 55%, #FFB800); }
 
@@ -175,7 +169,7 @@
       box-shadow: 0 0 12px #10FFA0; cursor: pointer;
     }
 
-    /* FAQ */
+    /* FAQ Accordion */
     details > summary { list-style: none; cursor: pointer; }
     details > summary::-webkit-details-marker { display: none; }
     details[open] .faq-chevron { transform: rotate(180deg); }
@@ -200,7 +194,7 @@
 </head>
 <body id="top" class="vibrant-mesh min-h-screen relative antialiased">
 
-  <!-- SVG SPRITE : icônes de plateformes -->
+  <!-- SVG SPRITE : Icônes des réseaux & plateformes -->
   <svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
     <symbol id="i-youtube" viewBox="0 0 24 24">
       <path fill="currentColor" fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/>
@@ -218,14 +212,6 @@
         <circle cx="16.5" cy="16" r="2.5"/>
       </g>
     </symbol>
-    <symbol id="i-deezer" viewBox="0 0 24 24">
-      <g fill="currentColor">
-        <rect x="2" y="16" width="4" height="4" rx="1"/>
-        <rect x="7.3" y="12" width="4" height="8" rx="1"/>
-        <rect x="12.6" y="8" width="4" height="12" rx="1"/>
-        <rect x="18" y="4" width="4" height="16" rx="1"/>
-      </g>
-    </symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24">
       <g fill="none" stroke="currentColor" stroke-width="1.9">
         <rect x="3" y="3" width="18" height="18" rx="5.5"/>
@@ -240,18 +226,18 @@
     </symbol>
   </svg>
 
-  <!-- TOP ANNOUNCEMENT BANNER -->
+  <!-- BANNIÈRE D'ANNONCE -->
   <div class="grad-youtube text-black py-2 px-4 text-center font-bold text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 relative z-50">
     <span class="inline-block animate-ping w-2 h-2 rounded-full bg-black shrink-0"></span>
     <span>Nouvelles compositions instrumentales 432 Hz & 528 Hz sur YouTube</span>
-    <a data-link="youtubeSub" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="underline ml-1 hover:opacity-80 hidden sm:inline">S'abonner &rarr;</a>
+    <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="underline ml-1 hover:opacity-80 hidden sm:inline">S'abonner &rarr;</a>
   </div>
 
   <!-- NAVIGATION BAR -->
   <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-zen-dark/80 border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
 
-      <!-- Brand Logo (MODIFIÉ AVEC LE LOGO LINKTREE OFFICIEL) -->
+      <!-- BRAND LOGO AVEC IMAGE LINKTREE OFFICIELLE -->
       <a href="#top" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
         <div class="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl neon-border-gradient transform group-hover:rotate-6 transition-all duration-300">
           <div class="w-full h-full bg-zen-dark rounded-[10px] overflow-hidden">
@@ -274,49 +260,47 @@
         </div>
       </a>
 
-      <!-- Desktop Navigation Links -->
+      <!-- DESKTOP NAVIGATION -->
       <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-7 font-medium text-sm text-zinc-300">
         <a href="#playlists" class="hover:text-zen-lime transition-colors flex items-center gap-1.5">
           <span>Playlists</span>
           <span class="w-2 h-2 rounded-full bg-zen-lime animate-pulse"></span>
         </a>
         <a href="#instruments" class="hover:text-zen-neon transition-colors">Sonorités & Instruments</a>
-        <a href="#youtube" class="hover:text-zen-pink transition-colors">La chaîne</a>
-        <a href="#univers" class="hover:text-zen-amber transition-colors">Bienfaits</a>
+        <a href="#youtube" class="hover:text-zen-pink transition-colors">La chaîne YouTube</a>
         <a href="#partout" class="hover:text-zen-purple transition-colors">Écouter partout</a>
       </nav>
 
-      <!-- Action Buttons -->
+      <!-- BUTTONS ACTION -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
         <button type="button" data-action="toggle" class="hidden sm:flex px-3.5 py-2 rounded-full text-xs font-mono bg-white/5 border border-white/10 hover:border-zen-lime/60 text-zinc-200 items-center gap-2 transition-all">
           <span class="eq text-zen-lime" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-          <span class="when-paused">Ambiance Synthé</span>
+          <span class="when-paused">Activer Synthé</span>
           <span class="when-playing">En écoute</span>
           <span class="icon-play"><i data-lucide="play" class="w-3 h-3 text-zen-lime"></i></span>
           <span class="icon-pause"><i data-lucide="pause" class="w-3 h-3 text-zen-lime"></i></span>
         </button>
 
-        <a data-link="youtubeSub" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" aria-label="S'abonner à la chaîne YouTube ZEN MUSIC SYSTEM" class="grad-youtube h-10 px-3 sm:px-5 rounded-full text-black font-syne font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-pink/30">
+        <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" aria-label="S'abonner à la chaîne YouTube ZEN MUSIC SYSTEM" class="grad-youtube h-10 px-3 sm:px-5 rounded-full text-black font-syne font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-pink/30">
           <svg class="w-5 h-5"><use href="#i-youtube"/></svg>
           <span class="hidden sm:inline">S'abonner</span>
         </a>
 
-        <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileDrawer" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white">
+        <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Drawer -->
+    <!-- MOBILE DRAWER -->
     <div id="mobileDrawer" class="hidden lg:hidden border-t border-white/10 bg-zen-surface px-6 py-6 space-y-4">
       <nav aria-label="Navigation mobile" class="flex flex-col gap-4 text-base font-semibold">
         <a href="#playlists" class="drawer-link text-white hover:text-zen-lime flex items-center justify-between">
-          <span>Playlists</span>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zen-lime/20 text-zen-lime uppercase">Aperçus</span>
+          <span>Playlists & Synthétiseur</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zen-lime/20 text-zen-lime uppercase">Interactif</span>
         </a>
         <a href="#instruments" class="drawer-link text-white hover:text-zen-neon">Sonorités & Instruments</a>
         <a href="#youtube" class="drawer-link text-white hover:text-zen-pink">La chaîne YouTube</a>
-        <a href="#univers" class="drawer-link text-white hover:text-zen-amber">Bienfaits</a>
         <a href="#partout" class="drawer-link text-white hover:text-zen-purple">Écouter partout</a>
       </nav>
       <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
@@ -325,7 +309,7 @@
           <span class="when-paused">Activer l'ambiance sonore</span>
           <span class="when-playing">Couper l'ambiance sonore</span>
         </button>
-        <a data-link="linktree" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="w-full py-3 text-center rounded-xl grad-rainbow font-extrabold text-black font-syne text-sm uppercase">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="w-full py-3 text-center rounded-xl grad-rainbow font-extrabold text-black font-syne text-sm uppercase">
           Tous les liens — Linktree
         </a>
       </div>
@@ -334,7 +318,7 @@
 
   <main>
 
-  <!-- HERO -->
+  <!-- HERO SECTION -->
   <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
     <div class="absolute top-10 -left-24 w-[420px] h-[420px] bg-zen-pink/30 rounded-full blur-[110px] pointer-events-none animate-blob" aria-hidden="true"></div>
     <div class="absolute top-40 -right-24 w-[460px] h-[460px] bg-zen-neon/25 rounded-full blur-[120px] pointer-events-none animate-blob" style="animation-delay:-6s" aria-hidden="true"></div>
@@ -359,7 +343,7 @@
         </p>
 
         <div class="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          <a data-link="youtube" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-7 sm:px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-zen-pink/40 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-3">
+          <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-7 sm:px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-zen-pink/40 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-3">
             <svg class="w-6 h-6"><use href="#i-youtube"/></svg>
             <span>Écouter sur YouTube</span>
           </a>
@@ -369,13 +353,13 @@
           </a>
         </div>
 
-        <a data-link="linktree" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-xs font-mono text-zinc-300 hover:text-zen-lime transition">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-xs font-mono text-zinc-300 hover:text-zen-lime transition">
           <span class="text-zen-lime"><svg class="w-4 h-4"><use href="#i-linktree"/></svg></span>
           <span>Tous les liens : linktr.ee/zenmusicsystem</span>
         </a>
       </div>
 
-      <!-- HERO VISUAL + NOW PLAYING -->
+      <!-- HERO VISUAL / PLAYER -->
       <div class="relative mx-auto max-w-5xl mt-4 group">
         <div class="absolute -inset-2 grad-rainbow rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-80 transition duration-700" aria-hidden="true"></div>
 
@@ -393,18 +377,18 @@
             <div class="absolute inset-0 bg-gradient-to-t from-zen-dark/90 via-transparent to-transparent pointer-events-none"></div>
           </div>
 
-          <!-- Now playing bar -->
+          <!-- BARRE EN LECTURE FIXE / CONTROLES -->
           <div class="sm:absolute sm:bottom-5 sm:left-5 sm:right-5 glass-card p-4 sm:rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-white/15">
             <div class="flex items-center gap-3 min-w-0">
-              <button type="button" data-action="toggle" data-toggle-label class="w-14 h-14 shrink-0 rounded-2xl grad-rainbow text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition" aria-label="Lancer l'aperçu sonore">
+              <button type="button" data-action="toggle" class="w-14 h-14 shrink-0 rounded-2xl grad-rainbow text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition" aria-label="Lancer l'aperçu sonore">
                 <span class="icon-play"><i data-lucide="play" class="w-6 h-6 fill-black ml-0.5"></i></span>
                 <span class="icon-pause"><i data-lucide="pause" class="w-6 h-6 fill-black"></i></span>
               </button>
               <div class="min-w-0">
                 <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-zen-lime font-bold">
                   <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-                  <span class="when-paused">Aperçu interactif Synthé</span>
-                  <span class="when-playing">En écoute</span>
+                  <span class="when-paused">Synthétiseur en attente</span>
+                  <span class="when-playing">Synthétiseur en direct</span>
                 </div>
                 <p class="font-syne font-bold text-white text-base truncate" data-np="title">Canopée 432 Hz</p>
                 <p class="text-xs text-zinc-300 truncate" data-np="desc">Nappes chaudes pour respirer et ralentir.</p>
@@ -412,7 +396,7 @@
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <a href="#playlists" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-syne font-bold text-xs uppercase transition">Changer d'ambiance</a>
-              <a data-link="youtubeSub" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl bg-white text-black font-syne font-extrabold text-xs uppercase hover:bg-zen-lime transition">S'abonner</a>
+              <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl bg-white text-black font-syne font-extrabold text-xs uppercase hover:bg-zen-lime transition">S'abonner</a>
             </div>
           </div>
         </div>
@@ -429,16 +413,15 @@
     </div>
   </section>
 
-  <!-- MARQUEE -->
+  <!-- MARQUEE DE DÉFILEMENT -->
   <div class="relative py-4 grad-rainbow -rotate-1 scale-[1.02] overflow-hidden shadow-xl shadow-zen-purple/20" aria-hidden="true">
     <div class="marquee-track font-syne font-extrabold text-black text-sm sm:text-lg uppercase tracking-wider whitespace-nowrap">
-      <span class="px-4">Musique Instrumentale ✦ Flûte Chinoise ✦ Grand Piano ✦ Synthétiseur 432 Hz ✦ 528 Hz ✦ Lâcher-Prise ✦ Sommeil Profond ✦ Deep Focus ✦ Sans Paroles ✦</span>
       <span class="px-4">Musique Instrumentale ✦ Flûte Chinoise ✦ Grand Piano ✦ Synthétiseur 432 Hz ✦ 528 Hz ✦ Lâcher-Prise ✦ Sommeil Profond ✦ Deep Focus ✦ Sans Paroles ✦</span>
       <span class="px-4">Musique Instrumentale ✦ Flûte Chinoise ✦ Grand Piano ✦ Synthétiseur 432 Hz ✦ 528 Hz ✦ Lâcher-Prise ✦ Sommeil Profond ✦ Deep Focus ✦ Sans Paroles ✦</span>
     </div>
   </div>
 
-  <!-- PLAYLISTS + LECTEUR SYNTHETISEUR -->
+  <!-- SECTION PLAYLISTS ET LECTEUR WEB AUDIO -->
   <section id="playlists" class="py-20 sm:py-24 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -451,22 +434,21 @@
           Des compositions pour <span class="grad-text">chaque moment</span>
         </h2>
         <p class="text-zinc-300 max-w-2xl mx-auto mt-4 text-sm sm:text-base">
-          Testez le synthétiseur d'ambiance ci-dessous, choisissez une fréquence et retrouvez nos sessions instrumentales complètes sur YouTube.
+          Testez le synthétiseur d'ambiance ci-dessous, filtrez la chaleur du son et retrouvez nos playlists réelles sur YouTube.
         </p>
       </div>
 
-      <!-- FEATURED PLAYER -->
+      <!-- FEATURED PLAYER WITH CANVAS -->
       <div class="relative mb-12">
         <div class="absolute -inset-1 rounded-[2rem] blur-xl opacity-40 transition-all duration-700" data-np="cover" aria-hidden="true"></div>
         <div class="relative glass-card rounded-3xl p-5 sm:p-8 border-white/15 overflow-hidden">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
 
-            <!-- Cover + infos -->
+            <!-- Cover + Details -->
             <div class="lg:col-span-4 flex flex-col">
               <div class="relative aspect-[16/10] lg:aspect-square rounded-2xl overflow-hidden transition-all duration-700 shadow-2xl flex items-center justify-center bg-gradient-to-br from-emerald-600 to-teal-900" data-np="cover">
                 <span class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-white/25"></span>
                 <span class="absolute -bottom-14 -left-10 w-52 h-52 rounded-full bg-black/15"></span>
-                <span class="absolute inset-6 rounded-full border-2 border-dashed border-black/20 animate-spin-slow hidden lg:block" aria-hidden="true"></span>
                 <span class="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl drop-shadow-xl" data-np="emoji" aria-hidden="true">🌿</span>
                 <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/75 text-white text-[10px] font-mono uppercase tracking-widest" data-np="tag">Méditation</span>
                 <span class="absolute bottom-3 left-3 eq text-black" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
@@ -478,7 +460,7 @@
               </div>
             </div>
 
-            <!-- Visualizer + controls -->
+            <!-- Visualizer + Interactive Controls -->
             <div class="lg:col-span-8 flex flex-col gap-5">
               <div class="relative w-full h-44 sm:h-56 lg:flex-1 lg:min-h-[14rem] bg-black/50 rounded-2xl overflow-hidden border border-white/10">
                 <canvas id="visualizerCanvas" class="absolute inset-0 w-full h-full block" aria-hidden="true"></canvas>
@@ -486,8 +468,8 @@
                   <span class="w-2 h-2 rounded-full bg-zinc-500 when-paused inline-block"></span>
                   <span class="w-2 h-2 rounded-full bg-zen-lime animate-pulse when-playing"></span>
                   <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-200" role="status">
-                    <span class="when-paused">En pause</span>
-                    <span class="when-playing">Visualiseur actif</span>
+                    <span class="when-paused">Synthé en pause</span>
+                    <span class="when-playing">Synthé actif (Génération audio 432/528 Hz)</span>
                   </span>
                 </div>
                 <button type="button" data-action="toggle" class="when-paused absolute inset-0 w-full h-full bg-black/30 backdrop-blur-[1px] cursor-pointer group/play" aria-label="Lancer l'aperçu sonore">
@@ -505,7 +487,7 @@
                   <button type="button" data-action="prev" aria-label="Playlist précédente" class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:border-zen-neon/60 text-white flex items-center justify-center transition">
                     <i data-lucide="skip-back" class="w-5 h-5"></i>
                   </button>
-                  <button type="button" data-action="toggle" data-toggle-label aria-label="Lancer l'aperçu sonore" class="w-16 h-16 rounded-2xl grad-rainbow text-black flex items-center justify-center hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-neon/30">
+                  <button type="button" data-action="toggle" aria-label="Lancer l'aperçu sonore" class="w-16 h-16 rounded-2xl grad-rainbow text-black flex items-center justify-center hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-neon/30">
                     <span class="icon-play"><i data-lucide="play" class="w-7 h-7 fill-black ml-0.5"></i></span>
                     <span class="icon-pause"><i data-lucide="pause" class="w-7 h-7 fill-black"></i></span>
                   </button>
@@ -524,7 +506,7 @@
                   </div>
                   <div>
                     <div class="flex justify-between text-xs font-mono mb-2 text-zinc-300">
-                      <label for="filterSlider">Chaleur du son (Filtre)</label>
+                      <label for="filterSlider">Chaleur du son (Passe-bas)</label>
                       <span id="filterValue" class="text-zen-lime">900 Hz</span>
                     </div>
                     <input type="range" id="filterSlider" min="200" max="4000" step="10" value="900" class="w-full cursor-pointer">
@@ -537,9 +519,9 @@
         </div>
       </div>
 
-      <!-- CARDS GRID -->
+      <!-- PLAYLISTS CARDS GRID -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="playlistGrid">
-        <!-- Généré dynamiquement par JS -->
+        <!-- Rempli en JS -->
       </div>
 
     </div>
@@ -580,7 +562,7 @@
             <div class="w-12 h-12 rounded-2xl bg-zen-neon/20 text-zen-neon flex items-center justify-center mb-6 group-hover:scale-110 transition">
               <i data-lucide="music-2" class="w-6 h-6"></i>
             </div>
-            <span class="text-xs font-mono text-zen-neon font-bold uppercase tracking-wider">Douceur & Clarity</span>
+            <span class="text-xs font-mono text-zen-neon font-bold uppercase tracking-wider">Douceur & Clarté</span>
             <h3 class="font-syne font-bold text-xl text-white mt-1 mb-3">Grand Piano Contemplatif</h3>
             <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">
               Des accords de piano minimalistes, lents et chaleureux conçus pour accompagner vos sessions de travail profond.
@@ -652,9 +634,13 @@
             </div>
 
             <div class="pt-4 flex flex-wrap gap-4">
-              <a data-link="youtubeSub" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-zen-pink/30 hover:scale-105 active:scale-95 transition flex items-center gap-3">
+              <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-zen-pink/30 hover:scale-105 active:scale-95 transition flex items-center gap-3">
                 <svg class="w-5 h-5"><use href="#i-youtube"/></svg>
                 <span>S'abonner sur YouTube</span>
+              </a>
+              <a href="https://www.youtube.com/@zenmusicsystem/playlists" target="_blank" rel="noopener noreferrer" class="px-7 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/20 text-white font-syne font-bold text-sm transition flex items-center gap-2">
+                <span>Voir toutes les Playlists</span>
+                <i data-lucide="external-link" class="w-4 h-4"></i>
               </a>
             </div>
           </div>
@@ -685,27 +671,27 @@
       </p>
 
       <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-        <a data-link="linktree" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-lime flex items-center gap-3 group transition">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-lime flex items-center gap-3 group transition">
           <svg class="w-6 h-6 text-zen-lime"><use href="#i-linktree"/></svg>
           <span class="font-syne font-bold text-sm text-white group-hover:text-zen-lime">Linktree Officiel</span>
         </a>
 
-        <a data-link="youtube" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-red flex items-center gap-3 group transition">
+        <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-red flex items-center gap-3 group transition">
           <svg class="w-6 h-6 text-zen-red"><use href="#i-youtube"/></svg>
           <span class="font-syne font-bold text-sm text-white group-hover:text-zen-red">Chaîne YouTube</span>
         </a>
 
-        <a data-link="spotify" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-emerald-400 flex items-center gap-3 group transition">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-emerald-400 flex items-center gap-3 group transition">
           <svg class="w-6 h-6 text-emerald-400"><use href="#i-spotify"/></svg>
           <span class="font-syne font-bold text-sm text-white group-hover:text-emerald-400">Spotify</span>
         </a>
 
-        <a data-link="apple" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-pink-400 flex items-center gap-3 group transition">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-pink-400 flex items-center gap-3 group transition">
           <svg class="w-6 h-6 text-pink-400"><use href="#i-applemusic"/></svg>
           <span class="font-syne font-bold text-sm text-white group-hover:text-pink-400">Apple Music</span>
         </a>
 
-        <a data-link="instagram" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-pink flex items-center gap-3 group transition">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-pink flex items-center gap-3 group transition">
           <svg class="w-6 h-6 text-zen-pink"><use href="#i-instagram"/></svg>
           <span class="font-syne font-bold text-sm text-white group-hover:text-zen-pink">Instagram</span>
         </a>
@@ -761,7 +747,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
 
       <div class="flex items-center gap-3">
-        <!-- Footer Logo -->
+        <!-- FOOTER LOGO -->
         <div class="w-8 h-8 rounded-lg neon-border-gradient">
           <div class="w-full h-full bg-zen-dark rounded-[6px] overflow-hidden">
             <img src="https://ugc.production.linktr.ee/e6888b05-5684-4967-9467-048c5b6dc893_logo-ZMS-2026.png?io=true&size=avatar-v3_0" alt="Logo" class="w-full h-full object-cover">
@@ -771,14 +757,14 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <a data-link="linktree" href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-lime transition">Linktree</a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-lime transition">Linktree</a>
         <span>•</span>
-        <a data-link="youtube" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-red transition">YouTube</a>
+        <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-red transition">YouTube</a>
       </div>
     </div>
   </footer>
 
-  <!-- MINI PLAYER FIXED -->
+  <!-- MINI PLAYER FIXE LORS DE LA LECTURE -->
   <div id="miniPlayer" class="fixed bottom-6 left-1/2 z-50 w-[92%] max-w-xl glass-card rounded-2xl p-3 border-zen-lime/40 shadow-2xl flex items-center justify-between gap-3">
     <div class="flex items-center gap-3 min-w-0">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center text-xl shrink-0" data-np="emoji">
@@ -794,20 +780,21 @@
         <span class="icon-play"><i data-lucide="play" class="w-4 h-4 fill-black"></i></span>
         <span class="icon-pause"><i data-lucide="pause" class="w-4 h-4 fill-black"></i></span>
       </button>
-      <a data-link="youtube" href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-syne font-bold text-[11px] uppercase">
+      <a href="https://www.youtube.com/@zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-syne font-bold text-[11px] uppercase">
         YouTube
       </a>
     </div>
   </div>
 
-  <!-- TOAST -->
+  <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-20 left-1/2 z-50 px-4 py-2 rounded-full bg-zen-surface border border-zen-lime text-zen-lime font-mono text-xs shadow-xl flex items-center gap-2">
     <i data-lucide="info" class="w-4 h-4"></i>
     <span id="toastMsg">Notification</span>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
-    // DONNÉES DES PLAYLISTS INSTRUMENTALES AVEC LIENS YOUTUBE CORRIGÉS
+  <!-- LOGIQUE JAVASCRIPT COMPLÈTE & CORRIGÉE -->
+  <script>
+    // DONNÉES DES PLAYLISTS INSTRUMENTALES
     const PLAYLISTS = [
       {
         id: 'canopee',
@@ -817,7 +804,7 @@
         emoji: '🌿',
         freq: 432,
         bgGradient: 'from-emerald-600 to-teal-900',
-        ytUrl: 'https://www.youtube.com/@zenmusicsystem'
+        ytUrl: 'https://www.youtube.com/@zenmusicsystem/playlists'
       },
       {
         id: 'flute-serenite',
@@ -827,7 +814,7 @@
         emoji: '🎋',
         freq: 432,
         bgGradient: 'from-teal-700 to-emerald-950',
-        ytUrl: 'https://www.youtube.com/@zenmusicsystem'
+        ytUrl: 'https://www.youtube.com/@zenmusicsystem/playlists'
       },
       {
         id: 'focus-piano',
@@ -837,7 +824,7 @@
         emoji: '🎹',
         freq: 528,
         bgGradient: 'from-blue-700 to-indigo-950',
-        ytUrl: 'https://www.youtube.com/@zenmusicsystem'
+        ytUrl: 'https://www.youtube.com/@zenmusicsystem/playlists'
       },
       {
         id: 'frequence-528',
@@ -847,7 +834,7 @@
         emoji: '✨',
         freq: 528,
         bgGradient: 'from-purple-800 to-pink-950',
-        ytUrl: 'https://www.youtube.com/@zenmusicsystem'
+        ytUrl: 'https://www.youtube.com/@zenmusicsystem/playlists'
       },
       {
         id: 'nuit-etoilee',
@@ -857,7 +844,7 @@
         emoji: '🌌',
         freq: 396,
         bgGradient: 'from-indigo-900 to-slate-950',
-        ytUrl: 'https://www.youtube.com/@zenmusicsystem'
+        ytUrl: 'https://www.youtube.com/@zenmusicsystem/playlists'
       }
     ];
 
@@ -882,11 +869,11 @@
       analyser.fftSize = 64;
 
       masterGain = audioCtx.createGain();
-      masterGain.gain.value = 0.6; // Volume initial
+      masterGain.gain.value = 0.6; // Volume par défaut
 
       filterNode = audioCtx.createBiquadFilter();
       filterNode.type = 'lowpass';
-      filterNode.frequency.value = 900; // Filtre passe-bas
+      filterNode.frequency.value = 900; // Fréquence filtre par défaut
 
       filterNode.connect(masterGain);
       masterGain.connect(analyser);
@@ -931,7 +918,7 @@
       osc2.connect(oscGain);
       oscGain.connect(filterNode);
 
-      // Fond sonore doux
+      // Fond sonore doux de type bruit rose filtré
       const noiseBuf = createNoiseBuffer();
       if (noiseBuf) {
         noiseNode = audioCtx.createBufferSource();
@@ -939,7 +926,7 @@
         noiseNode.loop = true;
 
         const noiseGain = audioCtx.createGain();
-        noiseGain.gain.value = 0.04;
+        noiseGain.gain.value = 0.03;
 
         noiseNode.connect(noiseGain);
         noiseGain.connect(filterNode);
@@ -956,11 +943,12 @@
       if (noiseNode) { try { noiseNode.stop(); noiseNode.disconnect(); } catch(e){} noiseNode = null; }
     }
 
-    // UI UPDATES
+    // MISE À JOUR DE L'INTERFACE UTILISATEUR
     function renderPlaylists() {
       const grid = document.getElementById('playlistGrid');
+      if (!grid) return;
       grid.innerHTML = PLAYLISTS.map((pl, idx) => `
-        <div data-id="${pl.id}" data-index="${idx}" class="pl-card glass-card rounded-3xl p-6 border-white/10 cursor-pointer relative overflow-hidden flex flex-col justify-between ${idx === currentIndex ? 'is-current' : ''}">
+        <div data-index="${idx}" class="pl-card glass-card rounded-3xl p-6 border-white/10 cursor-pointer relative overflow-hidden flex flex-col justify-between ${idx === currentIndex ? 'is-current' : ''}">
           <div>
             <div class="aspect-video rounded-2xl bg-gradient-to-br ${pl.bgGradient} flex items-center justify-center text-5xl mb-4 shadow-lg">
               ${pl.emoji}
@@ -986,7 +974,10 @@
           </div>
         </div>
       `).join('');
-      lucide.createIcons();
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
 
       document.querySelectorAll('.pl-card').forEach(card => {
         card.addEventListener('click', () => {
@@ -1026,7 +1017,7 @@
       if (isPlaying) {
         document.body.classList.add('is-playing');
         startSynth();
-        showToast(`Lecture : ${PLAYLISTS[currentIndex].title}`);
+        showToast(`Lecture synthé : ${PLAYLISTS[currentIndex].title}`);
       } else {
         document.body.classList.remove('is-playing');
         stopSynth();
@@ -1039,7 +1030,7 @@
       updateTrackUI();
       if (isPlaying) {
         startSynth();
-        showToast(`Ambiance : ${PLAYLISTS[currentIndex].title}`);
+        showToast(`Changement d'ambiance : ${PLAYLISTS[currentIndex].title}`);
       }
     }
 
@@ -1051,11 +1042,12 @@
       selectTrack((currentIndex - 1 + PLAYLISTS.length) % PLAYLISTS.length);
     }
 
-    // TOAST NOTIFICATION
+    // TOAST NOTIFICATIONS
     let toastTimeout = null;
     function showToast(msg) {
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
+      if (!toast || !toastMsg) return;
       toastMsg.textContent = msg;
       toast.classList.add('show');
       clearTimeout(toastTimeout);
@@ -1064,28 +1056,32 @@
       }, 2500);
     }
 
-    // SLIDERS AUDIO CONTROLS
+    // SLIDERS CONTROLS
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeValue = document.getElementById('volumeValue');
-    volumeSlider.addEventListener('input', (e) => {
-      const val = e.target.value;
-      volumeValue.textContent = `${val}%`;
-      if (masterGain && audioCtx) {
-        masterGain.gain.setValueAtTime(val / 100, audioCtx.currentTime);
-      }
-    });
+    if (volumeSlider && volumeValue) {
+      volumeSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        volumeValue.textContent = `${val}%`;
+        if (masterGain && audioCtx) {
+          masterGain.gain.setValueAtTime(val / 100, audioCtx.currentTime);
+        }
+      });
+    }
 
     const filterSlider = document.getElementById('filterSlider');
     const filterValue = document.getElementById('filterValue');
-    filterSlider.addEventListener('input', (e) => {
-      const val = e.target.value;
-      filterValue.textContent = `${val} Hz`;
-      if (filterNode && audioCtx) {
-        filterNode.frequency.setValueAtTime(val, audioCtx.currentTime);
-      }
-    });
+    if (filterSlider && filterValue) {
+      filterSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        filterValue.textContent = `${val} Hz`;
+        if (filterNode && audioCtx) {
+          filterNode.frequency.setValueAtTime(val, audioCtx.currentTime);
+        }
+      });
+    }
 
-    // ATTACH BUTTON ACTIONS
+    // GESTION DES BOUTONS DE LECTURE GLOBALE
     document.querySelectorAll('[data-action="toggle"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1107,28 +1103,30 @@
       });
     });
 
-    // MOBILE MENU DRAWER
+    // DRAWER MOBILE
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileDrawer = document.getElementById('mobileDrawer');
-    mobileMenuBtn.addEventListener('click', () => {
-      const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-      mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
-      mobileDrawer.classList.toggle('hidden');
-    });
-
-    document.querySelectorAll('.drawer-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileDrawer.classList.add('hidden');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    if (mobileMenuBtn && mobileDrawer) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
+        mobileDrawer.classList.toggle('hidden');
       });
-    });
 
-    // VISUALIZER CANVAS ANIMATION
+      document.querySelectorAll('.drawer-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.add('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    // CANVAS VISUALIZER ANIMATION
     const canvas = document.getElementById('visualizerCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas ? canvas.getContext('2d') : null;
 
     function resizeCanvas() {
-      if (!canvas) return;
+      if (!canvas || !canvas.parentElement) return;
       canvas.width = canvas.parentElement.clientWidth;
       canvas.height = canvas.parentElement.clientHeight;
     }
@@ -1201,10 +1199,15 @@
       }
     }
 
-    // INITIALISATION
-    renderPlaylists();
-    updateTrackUI();
-    animateVisualizer();
+    // INITIALISATION LORS DU CHARGEMENT DE LA PAGE
+    window.addEventListener('load', () => {
+      renderPlaylists();
+      updateTrackUI();
+      animateVisualizer();
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
   </script>
 </body>
 </html>
