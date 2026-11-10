@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZEN MUSIC SYSTEM — Playlists immersives & podcasts d'ambiance sur YouTube</title>
+  <meta name="description" content="ZEN MUSIC SYSTEM : la chaîne YouTube des voyages sonores. Playlists immersives, podcasts d'ambiance et fréquences apaisantes, à écouter partout.">
+  <meta name="theme-color" content="#090514">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            zen: {
+              lime: '#10FFA0',
+              neon: '#00F0FF',
+              purple: '#A855F7',
+              pink: '#FF007A',
+              amber: '#FFB800',
+              orange: '#FF5C00',
+              red: '#FF0033',
+              dark: '#090514',
+              surface: '#140B26'
+            }
+          },
+          fontFamily: {
+            syne: ['Syne', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+            jakarta: ['Plus Jakarta Sans', 'sans-serif']
+          },
+          animation: {
+            'spin-slow': 'spin 18s linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'blob': 'blob 16s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' }
+            },
+            blob: {
+              '0%, 100%': { transform: 'translate(0,0) scale(1)' },
+              '33%': { transform: 'translate(40px,-30px) scale(1.1)' },
+              '66%': { transform: 'translate(-30px,25px) scale(0.95)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-padding-top: 6rem; }
+    body {
+      background-color: #090514;
+      color: #E9E4F5;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    ::selection { background: #10FFA0; color: #000; }
+    :focus-visible { outline: 2px solid #10FFA0; outline-offset: 3px; border-radius: 8px; }
+
+    .vibrant-mesh {
+      background-color: #090514;
+      background-image:
+        radial-gradient(at 8% 6%, rgba(255, 0, 122, 0.28) 0px, transparent 45%),
+        radial-gradient(at 92% 10%, rgba(0, 240, 255, 0.22) 0px, transparent 45%),
+        radial-gradient(at 50% 38%, rgba(168, 85, 247, 0.22) 0px, transparent 50%),
+        radial-gradient(at 5% 62%, rgba(16, 255, 160, 0.16) 0px, transparent 45%),
+        radial-gradient(at 95% 75%, rgba(255, 184, 0, 0.16) 0px, transparent 45%),
+        radial-gradient(at 40% 100%, rgba(255, 0, 122, 0.2) 0px, transparent 50%);
+    }
+
+    .glass-card {
+      background: rgba(24, 14, 46, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .grad-text { background: linear-gradient(90deg, #10FFA0, #00F0FF 35%, #A855F7 65%, #FF007A); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .grad-text-warm { background: linear-gradient(90deg, #FFB800, #FF5C00 40%, #FF007A); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .grad-rainbow { background: linear-gradient(90deg, #10FFA0, #00F0FF, #A855F7, #FF007A, #FFB800); }
+    .grad-youtube { background: linear-gradient(120deg, #FF0033, #FF007A 55%, #FFB800); }
+    .neon-border-gradient { background: linear-gradient(135deg, #10FFA0, #00F0FF, #A855F7, #FF007A, #FFB800); padding: 2px; }
+
+    .marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    .eq { display: flex; align-items: flex-end; gap: 3px; height: 18px; }
+    .eq span {
+      width: 3px; height: 100%; border-radius: 2px; background: currentColor;
+      transform-origin: bottom; transform: scaleY(0.3);
+      animation: eq 1s ease-in-out infinite; animation-play-state: paused;
+    }
+    .eq span:nth-child(2) { animation-delay: -0.35s; }
+    .eq span:nth-child(3) { animation-delay: -0.6s; }
+    .eq span:nth-child(4) { animation-delay: -0.15s; }
+    body.is-playing .eq span { animation-play-state: running; }
+    @keyframes eq { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+
+    .icon-play { display: inline-flex; }
+    .icon-pause { display: none; }
+    body.is-playing .icon-play { display: none; }
+    body.is-playing .icon-pause { display: inline-flex; }
+    .when-playing { display: none; }
+    body.is-playing .when-playing { display: inline; }
+    body.is-playing .when-paused { display: none; }
+
+    .pl-card { transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
+    .pl-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,.28); }
+    .pl-card.is-current { border-color: rgba(16,255,160,.7); box-shadow: 0 0 0 1px rgba(16,255,160,.35), 0 25px 60px rgba(16,255,160,.12); }
+    .pl-card .c-play { display: inline-flex; }
+    .pl-card .c-pause, .pl-card .c-eq { display: none; }
+    body.is-playing .pl-card.is-current .c-play { display: none; }
+    body.is-playing .pl-card.is-current .c-pause { display: inline-flex; }
+    body.is-playing .pl-card.is-current .c-eq { display: flex; }
+
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 9999px; height: 6px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 20px; width: 20px; border-radius: 50%;
+      background: #10FFA0; border: 3px solid #090514;
+      box-shadow: 0 0 12px #10FFA0, 0 0 22px #00F0FF;
+      cursor: pointer;
+    }
+    input[type=range]::-moz-range-thumb {
+      height: 16px; width: 16px; border-radius: 50%;
+      background: #10FFA0; border: 3px solid #090514;
+      box-shadow: 0 0 12px #10FFA0;
+      cursor: pointer;
+    }
+
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .faq-chevron { transform: rotate(180deg); }
+
+    #miniPlayer {
+      transform: translate(-50%, 160%); opacity: 0; visibility: hidden; pointer-events: none;
+      transition: transform .45s cubic-bezier(.2,.9,.3,1.2), opacity .3s ease, visibility .45s;
+    }
+    body.is-playing #miniPlayer { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; }
+
+    #toast { transform: translate(-50%, 20px); opacity: 0; pointer-events: none; transition: all .3s ease; }
+    #toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .marquee-track { animation: none !important; }
+    }
+  </style>
+</head>
+<body id="top" class="vibrant-mesh min-h-screen relative antialiased">
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
+    <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></symbol>
+    <symbol id="i-spotify" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.2 9.6c3.4-1 6.9-.7 9.8 1M7.8 12.7c2.8-.8 5.5-.5 7.9.9M8.5 15.6c2.1-.6 4.1-.4 5.9.7"/></g></symbol>
+    <symbol id="i-applemusic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></g></symbol>
+    <symbol id="i-deezer" viewBox="0 0 24 24"><g fill="currentColor"><rect x="2" y="16" width="4" height="4" rx="1"/><rect x="7.3" y="12" width="4" height="8" rx="1"/><rect x="12.6" y="8" width="4" height="12" rx="1"/><rect x="18" y="4" width="4" height="16" rx="1"/></g></symbol>
+    <symbol id="i-ytmusic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="5.2"/></g><path fill="currentColor" d="M10.4 9.6v4.8l4-2.4-4-2.4Z"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/></g><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-tiktok" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3.5v11.2a3.8 3.8 0 1 1-3.8-3.8"/><path d="M13.5 3.5c.4 2.9 2.3 4.8 5.2 5.1"/></g></symbol>
+    <symbol id="i-linktree" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5V21.5M4.5 10h15M6.5 4.5 12 10l5.5-5.5M7 15.5l5-5 5 5"/></g></symbol>
+  </svg>
+
+  <div class="grad-youtube text-black py-2 px-4 text-center font-bold text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-2 relative z-50">
+    <span class="inline-block animate-ping w-2 h-2 rounded-full bg-black shrink-0"></span>
+    <span>Nouveaux voyages sonores sur la chaîne YouTube</span>
+    <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="underline ml-1 hover:opacity-80 hidden sm:inline">S'abonner &rarr;</a>
+  </div>
+
+  <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-zen-dark/80 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3">
+      <a href="#top" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-xl neon-border-gradient transform group-hover:rotate-6 transition-all duration-300">
+          <div class="w-full h-full bg-zen-dark rounded-[10px] flex items-center justify-center">
+            <i data-lucide="audio-waveform" class="w-5 h-5 text-zen-lime"></i>
+          </div>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-syne font-extrabold text-[15px] sm:text-xl sm:tracking-wider text-white whitespace-nowrap">ZEN <span class="grad-text">MUSIC SYSTEM</span></span>
+          <span class="hidden sm:block text-[9px] uppercase tracking-widest text-zinc-400 font-mono -mt-0.5">Voyages sonores • YouTube</span>
+        </div>
+      </a>
+
+      <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-7 font-medium text-sm text-zinc-300">
+        <a href="#playlists" class="hover:text-zen-lime transition-colors flex items-center gap-1.5"><span>Playlists</span><span class="w-2 h-2 rounded-full bg-zen-lime animate-pulse"></span></a>
+        <a href="#podcasts" class="hover:text-zen-neon transition-colors">Podcasts</a>
+        <a href="#youtube" class="hover:text-zen-pink transition-colors">La chaîne</a>
+        <a href="#univers" class="hover:text-zen-amber transition-colors">L'univers</a>
+        <a href="#partout" class="hover:text-zen-purple transition-colors">Écouter partout</a>
+      </nav>
+
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button type="button" data-action="toggle" class="hidden sm:flex px-3.5 py-2 rounded-full text-xs font-mono bg-white/5 border border-white/10 hover:border-zen-lime/60 text-zinc-200 items-center gap-2 transition-all">
+          <span class="eq text-zen-lime" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span class="when-paused">Ambiance</span>
+          <span class="when-playing">En écoute</span>
+          <span class="icon-play"><i data-lucide="play" class="w-3 h-3 text-zen-lime"></i></span>
+          <span class="icon-pause"><i data-lucide="pause" class="w-3 h-3 text-zen-lime"></i></span>
+        </button>
+
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" aria-label="S'abonner à la chaîne YouTube ZEN MUSIC SYSTEM" class="grad-youtube h-10 px-3 sm:px-5 rounded-full text-black font-syne font-extrabold text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-pink/30">
+          <svg class="w-5 h-5"><use href="#i-youtube"/></svg>
+          <span class="hidden sm:inline">S'abonner</span>
+        </a>
+
+        <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileDrawer" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobileDrawer" class="hidden lg:hidden border-t border-white/10 bg-zen-surface px-6 py-6 space-y-4">
+      <nav aria-label="Navigation mobile" class="flex flex-col gap-4 text-base font-semibold">
+        <a href="#playlists" class="drawer-link text-white hover:text-zen-lime flex items-center justify-between"><span>Playlists</span><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zen-lime/20 text-zen-lime uppercase">Aperçus</span></a>
+        <a href="#podcasts" class="drawer-link text-white hover:text-zen-neon">Podcasts</a>
+        <a href="#youtube" class="drawer-link text-white hover:text-zen-pink">La chaîne YouTube</a>
+        <a href="#univers" class="drawer-link text-white hover:text-zen-amber">L'univers</a>
+        <a href="#partout" class="drawer-link text-white hover:text-zen-purple">Écouter partout</a>
+      </nav>
+      <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+        <button type="button" data-action="toggle" class="drawer-link w-full py-3 rounded-xl bg-white/10 text-white text-xs font-mono flex items-center justify-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-zen-lime"></i>
+          <span class="when-paused">Activer l'ambiance sonore</span>
+          <span class="when-playing">Couper l'ambiance sonore</span>
+        </button>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="w-full py-3 text-center rounded-xl grad-rainbow font-extrabold text-black font-syne text-sm uppercase">Tous les liens — Linktree</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+  <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
+    <div class="absolute top-10 -left-24 w-[420px] h-[420px] bg-zen-pink/30 rounded-full blur-[110px] pointer-events-none animate-blob" aria-hidden="true"></div>
+    <div class="absolute top-40 -right-24 w-[460px] h-[460px] bg-zen-neon/25 rounded-full blur-[120px] pointer-events-none animate-blob" style="animation-delay:-6s" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-1/3 w-[380px] h-[380px] bg-zen-amber/20 rounded-full blur-[120px] pointer-events-none animate-blob" style="animation-delay:-11s" aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto mb-10">
+        <div class="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/15 backdrop-blur-md mb-6">
+          <span class="text-zen-red"><svg class="w-4 h-4"><use href="#i-youtube"/></svg></span>
+          <span class="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-zinc-100">Chaîne YouTube officielle</span>
+          <span class="text-zen-lime font-bold text-[11px] sm:text-xs font-mono uppercase tracking-widest">• Playlists & Podcasts</span>
+        </div>
+
+        <h1 class="font-syne text-[2.1rem] sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.06] mb-6">
+          APPUYEZ SUR PLAY,<br>
+          <span class="grad-text">LAISSEZ LE MONDE S'ÉVANOUIR</span>
+        </h1>
+
+        <p class="text-base sm:text-xl text-zinc-200 max-w-2xl mx-auto font-light leading-relaxed">
+          ZEN MUSIC SYSTEM, c'est la chaîne YouTube des voyages sonores : playlists immersives, podcasts d'ambiance et fréquences apaisantes pour se concentrer, méditer, dormir… ou recharger les batteries.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-7 sm:px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-lg shadow-zen-pink/40 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-3">
+            <svg class="w-6 h-6"><use href="#i-youtube"/></svg>
+            <span>Regarder sur YouTube</span>
+          </a>
+          <a href="#playlists" class="px-7 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/20 text-white font-syne font-bold text-sm backdrop-blur-md hover:border-zen-lime/70 transition-all flex items-center gap-2">
+            <i data-lucide="list-music" class="w-4 h-4 text-zen-lime"></i>
+            <span>Explorer les playlists</span>
+          </a>
+        </div>
+
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-xs font-mono text-zinc-300 hover:text-zen-lime transition">
+          <span class="text-zen-lime"><svg class="w-4 h-4"><use href="#i-linktree"/></svg></span>
+          <span>Tous les liens : linktr.ee/zenmusicsystem</span>
+        </a>
+      </div>
+
+      <div class="relative mx-auto max-w-5xl mt-4 group">
+        <div class="absolute -inset-2 grad-rainbow rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-80 transition duration-700" aria-hidden="true"></div>
+
+        <div class="relative rounded-3xl overflow-hidden border border-white/20 bg-zen-dark shadow-2xl">
+          <div class="relative aspect-[16/9] w-full overflow-hidden bg-gradient-to-br from-purple-900/40 via-zen-surface to-teal-950/60 flex items-center justify-center">
+            <div class="text-center p-6 z-10">
+              <div class="w-20 h-20 mx-auto mb-4 rounded-3xl grad-rainbow p-1 animate-spin-slow">
+                <div class="w-full h-full bg-zen-dark rounded-[22px] flex items-center justify-center">
+                  <i data-lucide="headphones" class="w-10 h-10 text-zen-lime"></i>
+                </div>
+              </div>
+              <h3 class="font-syne font-extrabold text-3xl sm:text-5xl text-white tracking-tight">ZEN MUSIC SYSTEM</h3>
+              <p class="text-sm sm:text-lg font-mono text-zen-neon mt-2">VIBES IMMERSIVES & AMBIANCES SONORES</p>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-zen-dark/90 via-transparent to-transparent pointer-events-none"></div>
+          </div>
+
+          <div class="sm:absolute sm:bottom-5 sm:left-5 sm:right-5 glass-card p-4 sm:rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-white/15">
+            <div class="flex items-center gap-3 min-w-0">
+              <button type="button" data-action="toggle" data-toggle-label class="w-14 h-14 shrink-0 rounded-2xl grad-rainbow text-black flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition" aria-label="Lancer l'aperçu sonore">
+                <span class="icon-play"><i data-lucide="play" class="w-6 h-6 fill-black ml-0.5"></i></span>
+                <span class="icon-pause"><i data-lucide="pause" class="w-6 h-6 fill-black"></i></span>
+              </button>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-zen-lime font-bold">
+                  <span class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                  <span class="when-paused">Aperçu d'ambiance</span>
+                  <span class="when-playing">En écoute</span>
+                </div>
+                <p class="font-syne font-bold text-white text-base truncate" data-np="title">Canopée 432 Hz</p>
+                <p class="text-xs text-zinc-300 truncate" data-np="desc">Nappes chaudes pour respirer et ralentir.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <a href="#playlists" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-syne font-bold text-xs uppercase transition">Changer d'ambiance</a>
+              <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="flex-1 sm:flex-none text-center px-4 py-2.5 rounded-xl bg-white text-black font-syne font-extrabold text-xs uppercase hover:bg-zen-lime transition">S'abonner</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-2 absolute -top-5 -left-6 bg-zen-lime text-black px-4 py-2.5 rounded-2xl shadow-xl shadow-zen-lime/30 animate-float -rotate-3"><i data-lucide="sparkles" class="w-4 h-4"></i><span class="text-xs font-extrabold font-mono uppercase">Playlists immersives</span></div>
+        <div class="hidden lg:flex items-center gap-2 absolute -top-4 -right-6 bg-zen-pink text-white px-4 py-2.5 rounded-2xl shadow-xl shadow-zen-pink/40 animate-float rotate-3" style="animation-delay:-3s"><i data-lucide="podcast" class="w-4 h-4"></i><span class="text-xs font-extrabold font-mono uppercase">Podcasts d'ambiance</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="relative py-4 grad-rainbow -rotate-1 scale-[1.02] overflow-hidden shadow-xl shadow-zen-purple/20" aria-hidden="true">
+    <div class="marquee-track font-syne font-extrabold text-black text-sm sm:text-lg uppercase tracking-wider whitespace-nowrap">
+      <span class="px-4">Playlists immersives ✦ Podcasts d'ambiance ✦ 432 Hz ✦ 528 Hz ✦ Deep Focus ✦ Sommeil profond ✦ Sons de la nature ✦ Méditation ✦ Énergie pure ✦</span>
+      <span class="px-4">Playlists immersives ✦ Podcasts d'ambiance ✦ 432 Hz ✦ 528 Hz ✦ Deep Focus ✦ Sommeil profond ✦ Sons de la nature ✦ Méditation ✦ Énergie pure ✦</span>
+      <span class="px-4">Playlists immersives ✦ Podcasts d'ambiance ✦ 432 Hz ✦ 528 Hz ✦ Deep Focus ✦ Sommeil profond ✦ Sons de la nature ✦ Méditation ✦ Énergie pure ✦</span>
+      <span class="px-4">Playlists immersives ✦ Podcasts d'ambiance ✦ 432 Hz ✦ 528 Hz ✦ Deep Focus ✦ Sommeil profond ✦ Sons de la nature ✦ Méditation ✦ Énergie pure ✦</span>
+    </div>
+  </div>
+
+  <section id="playlists" class="py-20 sm:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zen-lime/10 border border-zen-lime/40 text-zen-lime text-xs font-mono uppercase tracking-widest mb-3">
+          <i data-lucide="list-music" class="w-3.5 h-3.5"></i>
+          Le cœur de l'expérience
+        </div>
+        <h2 class="font-syne text-3xl sm:text-5xl font-extrabold text-white">Des playlists pour <span class="grad-text">chaque état d'esprit</span></h2>
+        <p class="text-zinc-300 max-w-2xl mx-auto mt-4 text-sm sm:text-base">Choisissez une ambiance, lancez un aperçu directement ici, puis retrouvez les sessions complètes sur la chaîne YouTube.</p>
+      </div>
+
+      <div class="relative mb-12">
+        <div class="absolute -inset-1 rounded-[2rem] blur-xl opacity-40 transition-all duration-700" data-np="cover" aria-hidden="true"></div>
+        <div class="relative glass-card rounded-3xl p-5 sm:p-8 border-white/15 overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+            <div class="lg:col-span-4 flex flex-col">
+              <div class="relative aspect-[16/10] lg:aspect-square rounded-2xl overflow-hidden transition-all duration-700 shadow-2xl flex items-center justify-center bg-gradient-to-br from-emerald-600 to-teal-900" data-np="cover">
+                <span class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-white/25"></span>
+                <span class="absolute -bottom-14 -left-10 w-52 h-52 rounded-full bg-black/15"></span>
+                <span class="absolute inset-6 rounded-full border-2 border-dashed border-black/20 animate-spin-slow hidden lg:block" aria-hidden="true"></span>
+                <span class="absolute inset-0 flex items-center justify-center text-7xl sm:text-8xl drop-shadow-xl" data-np="emoji" aria-hidden="true">🌿</span>
+                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/75 text-white text-[10px] font-mono uppercase tracking-widest" data-np="tag">Méditation</span>
+                <span class="absolute bottom-3 left-3 eq text-black" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+              </div>
+              <div class="mt-5">
+                <span class="text-[10px] font-mono tracking-widest uppercase text-zen-lime font-bold">Playlist en vedette</span>
+                <h3 class="font-syne font-extrabold text-2xl text-white mt-1" data-np="title">Canopée 432 Hz</h3>
+                <p class="text-sm text-zinc-300 mt-1" data-np="desc">Nappes chaudes pour respirer et ralentir.</p>
+              </div>
+            </div>
+
+            <div class="lg:col-span-8 flex flex-col gap-5">
+              <div class="relative w-full h-44 sm:h-56 lg:flex-1 lg:min-h-[14rem] bg-black/50 rounded-2xl overflow-hidden border border-white/10">
+                <canvas id="visualizerCanvas" class="absolute inset-0 w-full h-full block" aria-hidden="true"></canvas>
+                <div class="absolute top-3 left-3 flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md">
+                  <span class="w-2 h-2 rounded-full bg-zinc-500 when-paused inline-block"></span>
+                  <span class="w-2 h-2 rounded-full bg-zen-lime animate-pulse when-playing"></span>
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-200" role="status">
+                    <span class="when-paused">En pause</span>
+                    <span class="when-playing">Aperçu en cours</span>
+                  </span>
+                </div>
+                <button type="button" data-action="toggle" class="when-paused absolute inset-0 w-full h-full bg-black/30 backdrop-blur-[1px] cursor-pointer group/play" aria-label="Lancer l'aperçu sonore">
+                  <span class="flex flex-col items-center justify-center h-full">
+                    <span class="w-16 h-16 rounded-full grad-rainbow flex items-center justify-center text-black shadow-lg shadow-zen-lime/40 group-hover/play:scale-110 transition duration-300">
+                      <i data-lucide="play" class="w-7 h-7 fill-black ml-1"></i>
+                    </span>
+                    <span class="text-xs font-mono uppercase text-white mt-3 font-bold tracking-widest">Lancer l'aperçu</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="flex flex-col md:flex-row md:items-center gap-5">
+                <div class="flex items-center justify-center gap-3 shrink-0">
+                  <button type="button" data-action="prev" aria-label="Playlist précédente" class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:border-zen-neon/60 text-white flex items-center justify-center transition"><i data-lucide="skip-back" class="w-5 h-5"></i></button>
+                  <button type="button" data-action="toggle" data-toggle-label aria-label="Lancer l'aperçu sonore" class="w-16 h-16 rounded-2xl grad-rainbow text-black flex items-center justify-center hover:scale-105 active:scale-95 transition shadow-lg shadow-zen-neon/30">
+                    <span class="icon-play"><i data-lucide="play" class="w-7 h-7 fill-black ml-0.5"></i></span>
+                    <span class="icon-pause"><i data-lucide="pause" class="w-7 h-7 fill-black"></i></span>
+                  </button>
+                  <button type="button" data-action="next" aria-label="Playlist suivante" class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:border-zen-neon/60 text-white flex items-center justify-center transition"><i data-lucide="skip-forward" class="w-5 h-5"></i></button>
+                </div>
+
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <div class="flex justify-between text-xs font-mono mb-2 text-zinc-300"><label for="volumeSlider">Volume</label><span id="volumeValue" class="text-zen-neon">60%</span></div>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="60" class="w-full cursor-pointer">
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-xs font-mono mb-2 text-zinc-300"><label for="filterSlider">Chaleur du son</label><span id="filterValue" class="text-zen-lime">900 Hz</span></div>
+                    <input type="range" id="filterSlider" min="200" max="4000" step="10" value="900" class="w-full cursor-pointer">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="playlistGrid"></div>
+    </div>
+  </section>
+
+  <section id="podcasts" class="py-20 bg-zen-surface/60 relative border-t border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zen-pink/10 border border-zen-pink/40 text-zen-pink text-xs font-mono uppercase tracking-widest mb-3">
+          <i data-lucide="podcast" class="w-3.5 h-3.5"></i>
+          Format parlé & narratif
+        </div>
+        <h2 class="font-syne text-3xl sm:text-5xl font-extrabold text-white">Podcasts d'ambiance <span class="grad-text-warm">& Voyages Guidés</span></h2>
+        <p class="text-zinc-300 mt-4 text-sm sm:text-base">Des histoires enveloppantes, voix apaisantes et paysages sonores conçus pour relâcher la pression et voyager sans quitter son siège.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="glass-card rounded-3xl p-6 border-white/10 hover:border-zen-pink/50 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-zen-pink/20 text-zen-pink flex items-center justify-center mb-6 group-hover:scale-110 transition"><i data-lucide="moon" class="w-6 h-6"></i></div>
+            <span class="text-xs font-mono text-zen-pink font-bold uppercase tracking-wider">Épisode #01</span>
+            <h3 class="font-syne font-bold text-xl text-white mt-1 mb-3">Nuit sur l'Observatoire</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">Voyage au-dessus des nuages, bercé par les étoiles et des basses fréquences régénératrices.</p>
+          </div>
+          <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-syne font-bold text-white group-hover:text-zen-pink transition"><span>Écouter sur YouTube</span><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 border-white/10 hover:border-zen-amber/50 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-zen-amber/20 text-zen-amber flex items-center justify-center mb-6 group-hover:scale-110 transition"><i data-lucide="compass" class="w-6 h-6"></i></div>
+            <span class="text-xs font-mono text-zen-amber font-bold uppercase tracking-wider">Épisode #02</span>
+            <h3 class="font-syne font-bold text-xl text-white mt-1 mb-3">L'Expédition Silencieuse</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">Une marche virtuelle au cœur d'une forêt ancienne sous une pluie d'été bienfaisante.</p>
+          </div>
+          <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-syne font-bold text-white group-hover:text-zen-amber transition"><span>Écouter sur YouTube</span><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+        </div>
+
+        <div class="glass-card rounded-3xl p-6 border-white/10 hover:border-zen-neon/50 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-zen-neon/20 text-zen-neon flex items-center justify-center mb-6 group-hover:scale-110 transition"><i data-lucide="waves" class="w-6 h-6"></i></div>
+            <span class="text-xs font-mono text-zen-neon font-bold uppercase tracking-wider">Épisode #03</span>
+            <h3 class="font-syne font-bold text-xl text-white mt-1 mb-3">L'Écume des Heures</h3>
+            <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">Podcasts immersifs mêlant sons marins et vagues synthétiques 528 Hz pour libérer l'esprit.</p>
+          </div>
+          <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-syne font-bold text-white group-hover:text-zen-neon transition"><span>Écouter sur YouTube</span><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="youtube" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-card rounded-[2.5rem] p-8 sm:p-14 border-white/15 relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-zen-red/20 rounded-full blur-[100px] pointer-events-none"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zen-red/20 border border-zen-red/40 text-zen-red text-xs font-mono uppercase font-bold tracking-widest">
+              <svg class="w-4 h-4"><use href="#i-youtube"/></svg>
+              Chaîne Officielle
+            </div>
+            <h2 class="font-syne text-3xl sm:text-5xl font-extrabold text-white leading-tight">Rejoignez le mouvement sonore sur YouTube</h2>
+            <p class="text-zinc-300 text-sm sm:text-base leading-relaxed">Chaque semaine, nous publions de nouvelles playlists de 3h à 10h sans interruption, conçues pour être diffusées sur votre TV, ordinateur ou enceinte pendant vos sessions de travail, de méditation ou de repos.</p>
+            <div class="grid grid-cols-3 gap-4 pt-2 font-mono">
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10"><span class="block font-syne font-extrabold text-2xl text-zen-lime">4K</span><span class="text-[10px] text-zinc-400 uppercase">Qualité Visuelle</span></div>
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10"><span class="block font-syne font-extrabold text-2xl text-zen-neon">24/7</span><span class="text-[10px] text-zinc-400 uppercase">Ambiance continue</span></div>
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10"><span class="block font-syne font-extrabold text-2xl text-zen-pink">HQ</span><span class="text-[10px] text-zinc-400 uppercase">Audio Haute Fidélité</span></div>
+            </div>
+            <div class="pt-4 flex flex-wrap gap-4">
+              <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="grad-youtube px-8 py-4 rounded-2xl text-black font-syne font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-zen-pink/30 hover:scale-105 active:scale-95 transition flex items-center gap-3">
+                <svg class="w-5 h-5"><use href="#i-youtube"/></svg>
+                <span>S'abonner gratuitement</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden grad-rainbow p-1 shadow-2xl">
+              <div class="w-full h-full bg-zen-dark rounded-[22px] flex flex-col items-center justify-center p-8 text-center relative">
+                <i data-lucide="tv-2" class="w-20 h-20 text-zen-lime mb-4"></i>
+                <h4 class="font-syne font-bold text-xl text-white">Prêt pour l'immersion ?</h4>
+                <p class="text-xs text-zinc-400 mt-2">Profitez des visuels 4K interactifs directement dans votre salon sur YouTube TV.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="univers" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="font-syne text-3xl sm:text-5xl font-extrabold text-white">La science & l'art de l' <span class="grad-text">Univers Zen</span></h2>
+        <p class="text-zinc-300 mt-4 text-sm sm:text-base">Pourquoi nos sessions sonores transforment-elles votre quotidien ?</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-zen-lime/50 transition">
+          <div class="w-12 h-12 rounded-2xl bg-zen-lime/20 text-zen-lime flex items-center justify-center mb-6"><i data-lucide="zap" class="w-6 h-6"></i></div>
+          <h3 class="font-syne font-bold text-xl text-white mb-3">Fréquences Sacrées</h3>
+          <p class="text-sm text-zinc-300 leading-relaxed">Utilisation stratégique des fréquences 432 Hz et 528 Hz reconnues pour favoriser la relaxation corporelle et l'harmonisation de la respiration.</p>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-zen-neon/50 transition">
+          <div class="w-12 h-12 rounded-2xl bg-zen-neon/20 text-zen-neon flex items-center justify-center mb-6"><i data-lucide="brain" class="w-6 h-6"></i></div>
+          <h3 class="font-syne font-bold text-xl text-white mb-3">Ondes Isochrones</h3>
+          <p class="text-sm text-zinc-300 leading-relaxed">Stimulation douce des ondes cérébrales Alpha et Thêta pour induire un état d'hyper-focus ou faciliter l'endormissement sans effort.</p>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-zen-purple/50 transition">
+          <div class="w-12 h-12 rounded-2xl bg-zen-purple/20 text-zen-purple flex items-center justify-center mb-6"><i data-lucide="eye" class="w-6 h-6"></i></div>
+          <h3 class="font-syne font-bold text-xl text-white mb-3">Esthétique Hypnotique</h3>
+          <p class="text-sm text-zinc-300 leading-relaxed">Des visuels uniques générés pour créer une boucle visuelle apaisante qui s'intègre parfaitement dans votre espace de vie ou de travail.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="partout" class="py-20 bg-zen-surface/40 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="font-syne text-3xl sm:text-5xl font-extrabold text-white mb-4">Écoutez <span class="grad-text">partout où vous allez</span></h2>
+      <p class="text-zinc-300 max-w-xl mx-auto mb-12 text-sm sm:text-base">Retrouvez ZEN MUSIC SYSTEM sur vos plateformes de streaming et réseaux préférés.</p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-lime flex items-center gap-3 group transition"><svg class="w-6 h-6 text-zen-lime"><use href="#i-linktree"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-zen-lime">Linktree</span></a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-red flex items-center gap-3 group transition"><svg class="w-6 h-6 text-zen-red"><use href="#i-youtube"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-zen-red">YouTube</span></a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-emerald-400 flex items-center gap-3 group transition"><svg class="w-6 h-6 text-emerald-400"><use href="#i-spotify"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-emerald-400">Spotify</span></a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-pink-400 flex items-center gap-3 group transition"><svg class="w-6 h-6 text-pink-400"><use href="#i-applemusic"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-pink-400">Apple Music</span></a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-orange-400 flex items-center gap-3 group transition"><svg class="w-6 h-6 text-orange-400"><use href="#i-deezer"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-orange-400">Deezer</span></a>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-6 py-4 rounded-2xl glass-card border-white/10 hover:border-zen-pink flex items-center gap-3 group transition"><svg class="w-6 h-6 text-zen-pink"><use href="#i-instagram"/></svg><span class="font-syne font-bold text-sm text-white group-hover:text-zen-pink">Instagram</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12"><h2 class="font-syne text-3xl sm:text-4xl font-extrabold text-white">Foire aux Questions</h2></div>
+      <div class="space-y-4">
+        <details class="glass-card rounded-2xl border-white/10 overflow-hidden group">
+          <summary class="p-6 text-left font-syne font-bold text-lg text-white flex items-center justify-between"><span>Puis-je utiliser ces musiques pour étudier ou dormir ?</span><i data-lucide="chevron-down" class="w-5 h-5 text-zen-lime transition-transform faq-chevron"></i></summary>
+          <div class="px-6 pb-6 text-sm text-zinc-300 leading-relaxed border-t border-white/5 pt-4">Absolument ! Nos playlists et podcasts sont spécifiquement conçus pour offrir une toile de fond sonore constante, sans changements brusques de volume, idéale pour se concentrer longuement ou s'endormir paisiblement.</div>
+        </details>
+        <details class="glass-card rounded-2xl border-white/10 overflow-hidden group">
+          <summary class="p-6 text-left font-syne font-bold text-lg text-white flex items-center justify-between"><span>Où trouver la totalité des morceaux ?</span><i data-lucide="chevron-down" class="w-5 h-5 text-zen-lime transition-transform faq-chevron"></i></summary>
+          <div class="px-6 pb-6 text-sm text-zinc-300 leading-relaxed border-t border-white/5 pt-4">Toutes les vidéos intégrales (de 1h à 10h) sont disponibles gratuitement sur notre chaîne YouTube officielle ZEN MUSIC SYSTEM accessible via nos liens Linktree.</div>
+        </details>
+        <details class="glass-card rounded-2xl border-white/10 overflow-hidden group">
+          <summary class="p-6 text-left font-syne font-bold text-lg text-white flex items-center justify-between"><span>Comment fonctionne l'aperçu sonore sur ce site ?</span><i data-lucide="chevron-down" class="w-5 h-5 text-zen-lime transition-transform faq-chevron"></i></summary>
+          <div class="px-6 pb-6 text-sm text-zinc-300 leading-relaxed border-t border-white/5 pt-4">Ce site intègre un synthétiseur audio interactif Web Audio API directement dans votre navigateur. Il génère en temps réel des fréquences apaisantes et du son sans charger de fichiers externes !</div>
+        </details>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <footer class="border-t border-white/10 bg-zen-dark py-12 text-xs font-mono text-zinc-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg neon-border-gradient flex items-center justify-center"><div class="w-full h-full bg-zen-dark rounded-[6px] flex items-center justify-center"><i data-lucide="audio-waveform" class="w-4 h-4 text-zen-lime"></i></div></div>
+        <span class="font-syne font-bold text-sm text-white">ZEN MUSIC SYSTEM</span>
+      </div>
+      <p class="text-center md:text-left">© <span id="year"></span> ZEN MUSIC SYSTEM. Tous droits réservés. Voyages sonores & podcasts d'ambiance.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-lime transition">Linktree</a>
+        <span>•</span>
+        <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="hover:text-zen-red transition">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="miniPlayer" class="fixed bottom-6 left-1/2 z-50 w-[92%] max-w-xl glass-card rounded-2xl p-3 border-zen-lime/40 shadow-2xl flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-800 flex items-center justify-center text-xl shrink-0" data-np="emoji">🌿</div>
+      <div class="min-w-0">
+        <p class="font-syne font-bold text-xs text-white truncate" data-np="title">Canopée 432 Hz</p>
+        <span class="text-[10px] font-mono text-zen-lime uppercase font-semibold">En écoute</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button type="button" data-action="toggle" class="w-10 h-10 rounded-xl grad-rainbow text-black flex items-center justify-center shadow"><span class="icon-play"><i data-lucide="play" class="w-4 h-4 fill-black"></i></span><span class="icon-pause"><i data-lucide="pause" class="w-4 h-4 fill-black"></i></span></button>
+      <a href="https://linktr.ee/zenmusicsystem" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-syne font-bold text-[11px] uppercase">YouTube</a>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-20 left-1/2 z-50 px-4 py-2 rounded-full bg-zen-surface border border-zen-lime text-zen-lime font-mono text-xs shadow-xl flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i><span id="toastMsg">Notification</span></div>
+
+  <script>
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const PLAYLISTS = [
+      { id: 'canopee', title: 'Canopée 432 Hz', desc: 'Nappes chaudes pour respirer et ralentir.', tag: 'Méditation', emoji: '🌿', freq: 432, bgGradient: 'from-emerald-600 to-teal-900' },
+      { id: 'stellaire', title: 'Nuit Stellaire 528 Hz', desc: 'Voyage cosmologique pour sommeil profond.', tag: 'Sommeil', emoji: '🌌', freq: 528, bgGradient: 'from-purple-900 to-indigo-950' },
+      { id: 'focus', title: 'Deep Focus Isochrone', desc: 'Ondes stimulantes pour une concentration totale.', tag: 'Travail', emoji: '⚡', freq: 639, bgGradient: 'from-cyan-700 to-blue-950' },
+      { id: 'ocean', title: 'Océan Cosmique', desc: 'Sons de vagues synthétiques et basses relaxantes.', tag: 'Relaxation', emoji: '🌊', freq: 396, bgGradient: 'from-blue-600 to-purple-950' }
+    ];
+
+    let currentIndex = 0;
+    let isPlaying = false;
+    let audioCtx = null;
+    let masterGain = null;
+    let filterNode = null;
+    let osc1 = null;
+    let osc2 = null;
+    let noiseNode = null;
+    let analyser = null;
+
+    function initAudio() {
+      if (audioCtx) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.6;
+      filterNode = audioCtx.createBiquadFilter();
+      filterNode.type = 'lowpass';
+      filterNode.frequency.value = 900;
+      filterNode.connect(masterGain);
+      masterGain.connect(analyser);
+      analyser.connect(audioCtx.destination);
+    }
+
+    function createNoiseBuffer() {
+      if (!audioCtx) return null;
+      const bufferSize = audioCtx.sampleRate * 2;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+      return buffer;
+    }
+
+    function startSynth() {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      stopSynth();
+
+      const track = PLAYLISTS[currentIndex];
+      osc1 = audioCtx.createOscillator();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(track.freq / 2, audioCtx.currentTime);
+
+      osc2 = audioCtx.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(track.freq, audioCtx.currentTime);
+
+      const oscGain = audioCtx.createGain();
+      oscGain.gain.value = 0.25;
+
+      osc1.connect(oscGain);
+      osc2.connect(oscGain);
+      oscGain.connect(filterNode);
+
+      const noiseBuf = createNoiseBuffer();
+      if (noiseBuf) {
+        noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = noiseBuf;
+        noiseNode.loop = true;
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.value = 0.05;
+        noiseNode.connect(noiseGain);
+        noiseGain.connect(filterNode);
+        noiseNode.start();
+      }
+
+      osc1.start();
+      osc2.start();
+    }
+
+    function stopSynth() {
+      if (osc1) { try { osc1.stop(); osc1.disconnect(); } catch(e){} osc1 = null; }
+      if (osc2) { try { osc2.stop(); osc2.disconnect(); } catch(e){} osc2 = null; }
+      if (noiseNode) { try { noiseNode.stop(); noiseNode.disconnect(); } catch(e){} noiseNode = null; }
+    }
+
+    function renderPlaylists() {
+      const grid = document.getElementById('playlistGrid');
+      grid.innerHTML = PLAYLISTS.map((pl, idx) => `
+        <div data-id="${pl.id}" data-index="${idx}" class="pl-card glass-card rounded-3xl p-6 border-white/10 cursor-pointer relative overflow-hidden flex flex-col justify-between ${idx === currentIndex ? 'is-current' : ''}">
+          <div>
+            <div class="aspect-video rounded-2xl bg-gradient-to-br ${pl.bgGradient} flex items-center justify-center text-5xl mb-4 shadow-lg">${pl.emoji}</div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-zen-lime font-bold">${pl.tag}</span>
+            <h4 class="font-syne font-extrabold text-xl text-white mt-1">${pl.title}</h4>
+            <p class="text-xs text-zinc-300 mt-2">${pl.desc}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between pt-4 border-t border-white/10">
+            <span class="text-xs font-mono text-zinc-400">${pl.freq} Hz</span>
+            <div class="flex items-center gap-2">
+              <span class="c-eq eq text-zen-lime"><span></span><span></span><span></span><span></span></span>
+              <span class="c-play text-xs font-syne font-bold uppercase text-white flex items-center gap-1 group-hover:text-zen-lime">Écouter <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i></span>
+              <span class="c-pause text-xs font-syne font-bold uppercase text-zen-lime flex items-center gap-1">Pause <i data-lucide="pause" class="w-3.5 h-3.5 fill-current"></i></span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+
+      document.querySelectorAll('.pl-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const idx = parseInt(card.getAttribute('data-index'));
+          if (idx === currentIndex) togglePlay();
+          else selectTrack(idx);
+        });
+      });
+    }
+
+    function updateTrackUI() {
+      const track = PLAYLISTS[currentIndex];
+      document.querySelectorAll('[data-np="title"]').forEach(el => el.textContent = track.title);
+      document.querySelectorAll('[data-np="desc"]').forEach(el => el.textContent = track.desc);
+      document.querySelectorAll('[data-np="tag"]').forEach(el => el.textContent = track.tag);
+      document.querySelectorAll('[data-np="emoji"]').forEach(el => el.textContent = track.emoji);
+      document.querySelectorAll('[data-np="cover"]').forEach(el => {
+        el.className = el.className.replace(/bg-gradient-to-br from-[^\s]+ to-[^\s]+/, `bg-gradient-to-br ${track.bgGradient}`);
+      });
+      document.querySelectorAll('.pl-card').forEach((card, idx) => {
+        card.classList.toggle('is-current', idx === currentIndex);
+      });
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        document.body.classList.add('is-playing');
+        startSynth();
+        showToast(`Lecture : ${PLAYLISTS[currentIndex].title}`);
+      } else {
+        document.body.classList.remove('is-playing');
+        stopSynth();
+        showToast('Ambiance en pause');
+      }
+    }
+
+    function selectTrack(index) {
+      currentIndex = index;
+      updateTrackUI();
+      if (isPlaying) {
+        startSynth();
+        showToast(`Ambiance : ${PLAYLISTS[currentIndex].title}`);
+      }
+    }
+
+    function nextTrack() { selectTrack((currentIndex + 1) % PLAYLISTS.length); }
+    function prevTrack() { selectTrack((currentIndex - 1 + PLAYLISTS.length) % PLAYLISTS.length); }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeValue = document.getElementById('volumeValue');
+    volumeSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      volumeValue.textContent = `${val}%`;
+      if (masterGain) masterGain.gain.setValueAtTime(val / 100, audioCtx.currentTime);
+    });
+
+    const filterSlider = document.getElementById('filterSlider');
+    const filterValue = document.getElementById('filterValue');
+    filterSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      filterValue.textContent = `${val} Hz`;
+      if (filterNode) filterNode.frequency.setValueAtTime(val, audioCtx.currentTime);
+    });
+
+    document.querySelectorAll('[data-action="toggle"]').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); togglePlay(); }));
+    document.querySelectorAll('[data-action="next"]').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); nextTrack(); }));
+    document.querySelectorAll('[data-action="prev"]').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); prevTrack(); }));
+
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    mobileMenuBtn.addEventListener('click', () => {
+      const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+      mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
+      mobileDrawer.classList.toggle('hidden');
+    });
+    document.querySelectorAll('.drawer-link').forEach(link => link.addEventListener('click', () => { mobileDrawer.classList.add('hidden'); mobileMenuBtn.setAttribute('aria-expanded', 'false'); }));
+
+    const canvas = document.getElementById('visualizerCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function animateVisualizer() {
+      requestAnimationFrame(animateVisualizer);
+      const width = canvas.width;
+      const height = canvas.height;
+      const centerY = height / 2;
+      ctx.clearRect(0, 0, width, height);
+
+      if (isPlaying && analyser) {
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#10FFA0';
+        const sliceWidth = width / bufferLength; let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = (v * height) / 4 + centerY / 2;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#00F0FF';
+        x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = height - ((v * height) / 4 + centerY / 2);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.stroke();
+      } else {
+        const time = Date.now() * 0.002;
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        for (let x = 0; x < width; x += 5) {
+          const y = centerY + Math.sin(x * 0.02 + time) * 4;
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    }
+
+    renderPlaylists();
+    updateTrackUI();
+    animateVisualizer();
+  </script>
+</body>
+</html>
